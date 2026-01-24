@@ -16,7 +16,8 @@
       "default": "Technical",
       "enum": [
         "HR",
-        "Technical"
+        "Technical",
+        "Coding"
       ]
     },
     "difficulty": {

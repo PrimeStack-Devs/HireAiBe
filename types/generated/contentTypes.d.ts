@@ -455,7 +455,7 @@ export interface ApiInterviewInterview extends Struct.CollectionTypeSchema {
       'api::interview.interview'
     > &
       Schema.Attribute.Private;
-    mode: Schema.Attribute.Enumeration<['HR', 'Technical']> &
+    mode: Schema.Attribute.Enumeration<['HR', 'Technical', 'Coding']> &
       Schema.Attribute.DefaultTo<'Technical'>;
     numberOfQuestions: Schema.Attribute.Integer;
     publishedAt: Schema.Attribute.DateTime;
