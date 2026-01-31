@@ -12,6 +12,7 @@ module.exports = {
           where: { user: userId, publishedAt: { $notNull: true } },
           populate: true,
         });
+         
 
       if (!interviews.length) {
         return ctx.send({
@@ -39,7 +40,7 @@ module.exports = {
       for (const interview of interviews) {
         const report = interview.report || {};
         const scores = report.scores || {};
-
+         
         // Basic scores
         const overall = scores.overall || 0;
         const confidence = scores.confidenceLevel || 0;
@@ -51,6 +52,7 @@ module.exports = {
 
         // 📈 Trend data by date
         const date = dayjs(interview.createdAt).format("YYYY-MM-DD");
+        const time = dayjs(interview.updatedAt).format("HH:mm");
         if (!trendMap[date]) {
           trendMap[date] = { date, overallSum: 0, count: 0 };
         }
@@ -100,6 +102,7 @@ module.exports = {
           recommendation:
             report.overallPerformance?.hiringRecommendation || "N/A",
           date,
+          time,
         });
       }
 
