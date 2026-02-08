@@ -71,6 +71,30 @@
       "relation": "oneToMany",
       "target": "api::interview.interview",
       "mappedBy": "user"
+    },
+    "organizationsOwned": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::organization.organization",
+      "mappedBy": "createdByUser"
+    },
+    "organization": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::organization.organization",
+      "inversedBy": "users"
+    },
+    "question_banks": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::question-bank.question-bank",
+      "mappedBy": "createdByUser"
+    },
+    "assessments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::assessment.assessment",
+      "mappedBy": "createdByUser"
     }
   }
 }

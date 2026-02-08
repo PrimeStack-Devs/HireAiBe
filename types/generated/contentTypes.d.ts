@@ -430,6 +430,57 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiAssessmentAssessment extends Struct.CollectionTypeSchema {
+  collectionName: 'assessments';
+  info: {
+    displayName: 'assessment';
+    pluralName: 'assessments';
+    singularName: 'assessment';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    autoSubmitOnTimeout: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<true>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    createdByUser: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    description: Schema.Attribute.Text;
+    durationMinutes: Schema.Attribute.Integer & Schema.Attribute.Required;
+    instructions: Schema.Attribute.Blocks;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::assessment.assessment'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    organization: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::organization.organization'
+    >;
+    publicLinkEnabled: Schema.Attribute.Boolean;
+    publishedAt: Schema.Attribute.DateTime;
+    questions: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::question-bank.question-bank'
+    >;
+    shuffleOptions: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    shuffleQuestions: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<true>;
+    tabSwitchLimit: Schema.Attribute.Integer;
+    totalMarks: Schema.Attribute.Integer;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiInterviewInterview extends Struct.CollectionTypeSchema {
   collectionName: 'interviews';
   info: {
@@ -469,6 +520,158 @@ export interface ApiInterviewInterview extends Struct.CollectionTypeSchema {
       'manyToOne',
       'plugin::users-permissions.user'
     >;
+  };
+}
+
+export interface ApiOrganizationOrganization
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'organizations';
+  info: {
+    displayName: 'organization';
+    pluralName: 'organizations';
+    singularName: 'organization';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    assessments: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::assessment.assessment'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    createdByUser: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    description: Schema.Attribute.Text;
+    domain: Schema.Attribute.String;
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    isVerified: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::organization.organization'
+    > &
+      Schema.Attribute.Private;
+    logo: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    maxAssessments: Schema.Attribute.Integer;
+    maxQuestions: Schema.Attribute.Integer;
+    maxUsers: Schema.Attribute.Integer;
+    name: Schema.Attribute.String;
+    planType: Schema.Attribute.Enumeration<
+      ['free', 'trial', 'pro', 'enterprise']
+    > &
+      Schema.Attribute.DefaultTo<'free'>;
+    publishedAt: Schema.Attribute.DateTime;
+    question_banks: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::question-bank.question-bank'
+    >;
+    settings: Schema.Attribute.JSON;
+    skills: Schema.Attribute.Relation<'oneToMany', 'api::skill.skill'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    users: Schema.Attribute.Relation<
+      'oneToMany',
+      'plugin::users-permissions.user'
+    >;
+  };
+}
+
+export interface ApiQuestionBankQuestionBank
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'question_banks';
+  info: {
+    displayName: 'question-bank';
+    pluralName: 'question-banks';
+    singularName: 'question-bank';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    assessments: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::assessment.assessment'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    createdByUser: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    difficulty: Schema.Attribute.Enumeration<['easy', 'medium', 'hard']>;
+    explanation: Schema.Attribute.Text;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::question-bank.question-bank'
+    > &
+      Schema.Attribute.Private;
+    marks: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<1>;
+    negativeMarks: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    options: Schema.Attribute.Component<'question.question-option', true> &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 6;
+          min: 2;
+        },
+        number
+      >;
+    organization: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::organization.organization'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    questionText: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    skills: Schema.Attribute.Relation<'manyToMany', 'api::skill.skill'>;
+    source: Schema.Attribute.Enumeration<['manual', 'csv', 'ai']>;
+    type: Schema.Attribute.Enumeration<['mcq_single']>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiSkillSkill extends Struct.CollectionTypeSchema {
+  collectionName: 'skills';
+  info: {
+    displayName: 'skill';
+    pluralName: 'skills';
+    singularName: 'skill';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    category: Schema.Attribute.Enumeration<
+      ['technical', 'hr', 'aptitude', 'soft-skills', 'coding']
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::skill.skill'> &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    organization: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::organization.organization'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    questions: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::question-bank.question-bank'
+    >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -929,6 +1132,10 @@ export interface PluginUsersPermissionsUser
     draftAndPublish: false;
   };
   attributes: {
+    assessments: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::assessment.assessment'
+    >;
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
@@ -950,6 +1157,14 @@ export interface PluginUsersPermissionsUser
       'plugin::users-permissions.user'
     > &
       Schema.Attribute.Private;
+    organization: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::organization.organization'
+    >;
+    organizationsOwned: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::organization.organization'
+    >;
     password: Schema.Attribute.Password &
       Schema.Attribute.Private &
       Schema.Attribute.SetMinMaxLength<{
@@ -957,6 +1172,10 @@ export interface PluginUsersPermissionsUser
       }>;
     provider: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    question_banks: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::question-bank.question-bank'
+    >;
     resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Private;
     role: Schema.Attribute.Relation<
       'manyToOne',
@@ -985,7 +1204,11 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::assessment.assessment': ApiAssessmentAssessment;
       'api::interview.interview': ApiInterviewInterview;
+      'api::organization.organization': ApiOrganizationOrganization;
+      'api::question-bank.question-bank': ApiQuestionBankQuestionBank;
+      'api::skill.skill': ApiSkillSkill;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

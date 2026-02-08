@@ -1,0 +1,83 @@
+{
+  "kind": "collectionType",
+  "collectionName": "question_banks",
+  "info": {
+    "singularName": "question-bank",
+    "pluralName": "question-banks",
+    "displayName": "question-bank"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "questionText": {
+      "type": "blocks",
+      "required": true
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "mcq_single"
+      ]
+    },
+    "difficulty": {
+      "type": "enumeration",
+      "enum": [
+        "easy",
+        "medium",
+        "hard"
+      ]
+    },
+    "marks": {
+      "type": "integer",
+      "default": 1
+    },
+    "negativeMarks": {
+      "type": "integer",
+      "default": 0
+    },
+    "explanation": {
+      "type": "text"
+    },
+    "source": {
+      "type": "enumeration",
+      "enum": [
+        "manual",
+        "csv",
+        "ai"
+      ]
+    },
+    "options": {
+      "type": "component",
+      "component": "question.question-option",
+      "repeatable": true,
+      "min": 2,
+      "max": 6
+    },
+    "organization": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::organization.organization",
+      "inversedBy": "question_banks"
+    },
+    "skills": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::skill.skill",
+      "inversedBy": "questions"
+    },
+    "createdByUser": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "question_banks"
+    },
+    "assessments": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::assessment.assessment",
+      "mappedBy": "questions"
+    }
+  }
+}

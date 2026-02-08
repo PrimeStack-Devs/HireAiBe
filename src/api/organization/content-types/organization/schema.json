@@ -1,0 +1,95 @@
+{
+  "kind": "collectionType",
+  "collectionName": "organizations",
+  "info": {
+    "singularName": "organization",
+    "pluralName": "organizations",
+    "displayName": "organization"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "domain": {
+      "type": "string"
+    },
+    "isActive": {
+      "type": "boolean",
+      "required": false,
+      "default": true
+    },
+    "isVerified": {
+      "type": "boolean",
+      "default": false
+    },
+    "planType": {
+      "type": "enumeration",
+      "default": "free",
+      "enum": [
+        "free",
+        "trial",
+        "pro",
+        "enterprise"
+      ]
+    },
+    "maxUsers": {
+      "type": "integer"
+    },
+    "maxAssessments": {
+      "type": "integer"
+    },
+    "maxQuestions": {
+      "type": "integer"
+    },
+    "settings": {
+      "type": "json"
+    },
+    "createdByUser": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "organizationsOwned"
+    },
+    "users": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "organization"
+    },
+    "description": {
+      "type": "text"
+    },
+    "skills": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::skill.skill",
+      "mappedBy": "organization"
+    },
+    "question_banks": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::question-bank.question-bank",
+      "mappedBy": "organization"
+    },
+    "assessments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::assessment.assessment",
+      "mappedBy": "organization"
+    }
+  }
+}
