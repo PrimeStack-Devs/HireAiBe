@@ -430,6 +430,58 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiAssessmentAttemptAssessmentAttempt
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'assessment_attempts';
+  info: {
+    displayName: 'assessment-attempt';
+    pluralName: 'assessment-attempts';
+    singularName: 'assessment-attempt';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    assessment: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::assessment.assessment'
+    >;
+    autoSubmitted: Schema.Attribute.Boolean;
+    candidateEmail: Schema.Attribute.Email & Schema.Attribute.Required;
+    candidateName: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    endTime: Schema.Attribute.DateTime;
+    enrollment: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::assessment-attempt.assessment-attempt'
+    > &
+      Schema.Attribute.Private;
+    organization: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::organization.organization'
+    >;
+    percentage: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
+    responses: Schema.Attribute.JSON;
+    resultStatus: Schema.Attribute.Enumeration<['pass', 'fail']>;
+    score: Schema.Attribute.Integer;
+    startTime: Schema.Attribute.DateTime;
+    tabSwitchCount: Schema.Attribute.Integer;
+    timeTakenSec: Schema.Attribute.Integer;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+  };
+}
+
 export interface ApiAssessmentAssessment extends Struct.CollectionTypeSchema {
   collectionName: 'assessments';
   info: {
@@ -441,6 +493,10 @@ export interface ApiAssessmentAssessment extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    attempts: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::assessment-attempt.assessment-attempt'
+    >;
     autoSubmitOnTimeout: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<true>;
     createdAt: Schema.Attribute.DateTime;
@@ -538,6 +594,10 @@ export interface ApiOrganizationOrganization
     assessments: Schema.Attribute.Relation<
       'oneToMany',
       'api::assessment.assessment'
+    >;
+    attempts: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::assessment-attempt.assessment-attempt'
     >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1136,6 +1196,10 @@ export interface PluginUsersPermissionsUser
       'oneToMany',
       'api::assessment.assessment'
     >;
+    attempts: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::assessment-attempt.assessment-attempt'
+    >;
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
@@ -1204,6 +1268,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::assessment-attempt.assessment-attempt': ApiAssessmentAttemptAssessmentAttempt;
       'api::assessment.assessment': ApiAssessmentAssessment;
       'api::interview.interview': ApiInterviewInterview;
       'api::organization.organization': ApiOrganizationOrganization;

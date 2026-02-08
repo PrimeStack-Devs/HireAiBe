@@ -90,6 +90,12 @@
       "relation": "oneToMany",
       "target": "api::assessment.assessment",
       "mappedBy": "organization"
+    },
+    "attempts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::assessment-attempt.assessment-attempt",
+      "mappedBy": "organization"
     }
   }
 }

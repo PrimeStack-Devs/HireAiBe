@@ -95,6 +95,12 @@
       "relation": "oneToMany",
       "target": "api::assessment.assessment",
       "mappedBy": "createdByUser"
+    },
+    "attempts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::assessment-attempt.assessment-attempt",
+      "mappedBy": "user"
     }
   }
 }

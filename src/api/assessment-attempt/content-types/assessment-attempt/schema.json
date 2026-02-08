@@ -1,0 +1,74 @@
+{
+  "kind": "collectionType",
+  "collectionName": "assessment_attempts",
+  "info": {
+    "singularName": "assessment-attempt",
+    "pluralName": "assessment-attempts",
+    "displayName": "assessment-attempt"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "candidateName": {
+      "type": "string"
+    },
+    "candidateEmail": {
+      "type": "email",
+      "required": true
+    },
+    "enrollment": {
+      "type": "string"
+    },
+    "assessment": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::assessment.assessment",
+      "inversedBy": "attempts"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "attempts"
+    },
+    "organization": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::organization.organization",
+      "inversedBy": "attempts"
+    },
+    "startTime": {
+      "type": "datetime"
+    },
+    "endTime": {
+      "type": "datetime"
+    },
+    "timeTakenSec": {
+      "type": "integer"
+    },
+    "responses": {
+      "type": "json"
+    },
+    "score": {
+      "type": "integer"
+    },
+    "percentage": {
+      "type": "integer"
+    },
+    "resultStatus": {
+      "type": "enumeration",
+      "enum": [
+        "pass",
+        "fail"
+      ]
+    },
+    "tabSwitchCount": {
+      "type": "integer"
+    },
+    "autoSubmitted": {
+      "type": "boolean"
+    }
+  }
+}
