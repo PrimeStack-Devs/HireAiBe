@@ -61,14 +61,14 @@
     "publicLinkEnabled": {
       "type": "boolean"
     },
-    "instructions": {
-      "type": "blocks"
-    },
     "attempts": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::assessment-attempt.assessment-attempt",
       "mappedBy": "assessment"
+    },
+    "instructions": {
+      "type": "text"
     }
   }
 }

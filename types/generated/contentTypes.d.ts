@@ -508,7 +508,7 @@ export interface ApiAssessmentAssessment extends Struct.CollectionTypeSchema {
     >;
     description: Schema.Attribute.Text;
     durationMinutes: Schema.Attribute.Integer & Schema.Attribute.Required;
-    instructions: Schema.Attribute.Blocks;
+    instructions: Schema.Attribute.Text;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
