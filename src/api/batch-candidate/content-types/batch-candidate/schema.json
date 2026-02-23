@@ -1,0 +1,42 @@
+{
+  "kind": "collectionType",
+  "collectionName": "batch_candidates",
+  "info": {
+    "singularName": "batch-candidate",
+    "pluralName": "batch-candidates",
+    "displayName": "batchCandidate"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "enrollment": {
+      "type": "string"
+    },
+    "candidateStatus": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "registered",
+        "attempted"
+      ]
+    },
+    "batch": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::batch.batch",
+      "inversedBy": "candidates"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "invites"
+    }
+  }
+}

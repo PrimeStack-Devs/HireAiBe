@@ -101,6 +101,12 @@
       "relation": "oneToMany",
       "target": "api::assessment-attempt.assessment-attempt",
       "mappedBy": "user"
+    },
+    "invites": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::batch-candidate.batch-candidate",
+      "mappedBy": "user"
     }
   }
 }

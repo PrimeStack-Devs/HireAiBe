@@ -96,6 +96,12 @@
       "relation": "oneToMany",
       "target": "api::assessment-attempt.assessment-attempt",
       "mappedBy": "organization"
+    },
+    "assessment_schedules": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::assessment-schedule.assessment-schedule",
+      "mappedBy": "organization"
     }
   }
 }

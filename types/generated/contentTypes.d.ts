@@ -468,6 +468,10 @@ export interface ApiAssessmentAttemptAssessmentAttempt
     publishedAt: Schema.Attribute.DateTime;
     responses: Schema.Attribute.JSON;
     resultStatus: Schema.Attribute.Enumeration<['pass', 'fail']>;
+    schedule: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::assessment-schedule.assessment-schedule'
+    >;
     score: Schema.Attribute.Integer;
     startTime: Schema.Attribute.DateTime;
     tabSwitchCount: Schema.Attribute.Integer;
@@ -478,6 +482,64 @@ export interface ApiAssessmentAttemptAssessmentAttempt
     user: Schema.Attribute.Relation<
       'manyToOne',
       'plugin::users-permissions.user'
+    >;
+  };
+}
+
+export interface ApiAssessmentScheduleAssessmentSchedule
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'assessment_schedules';
+  info: {
+    displayName: 'assessmentSchedule';
+    pluralName: 'assessment-schedules';
+    singularName: 'assessment-schedule';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    allowReattempt: Schema.Attribute.Boolean;
+    assessment: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::assessment.assessment'
+    >;
+    attempts: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::assessment-attempt.assessment-attempt'
+    >;
+    batch: Schema.Attribute.Relation<'manyToOne', 'api::batch.batch'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    duration: Schema.Attribute.Integer;
+    endTime: Schema.Attribute.DateTime;
+    graceTime: Schema.Attribute.Integer;
+    instructions: Schema.Attribute.Blocks;
+    isActive: Schema.Attribute.Boolean;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::assessment-schedule.assessment-schedule'
+    > &
+      Schema.Attribute.Private;
+    maxAttempts: Schema.Attribute.Integer;
+    organization: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::organization.organization'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    resultReleaseMode: Schema.Attribute.Enumeration<
+      ['instant', 'afterEnd', 'manual']
+    >;
+    scheduleStatus: Schema.Attribute.Enumeration<
+      ['upcoming', 'live', 'completed', 'expired']
+    >;
+    startTime: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    visibility: Schema.Attribute.Enumeration<
+      ['batch-only', 'public', 'invite-only']
     >;
   };
 }
@@ -526,11 +588,87 @@ export interface ApiAssessmentAssessment extends Struct.CollectionTypeSchema {
       'manyToMany',
       'api::question-bank.question-bank'
     >;
+    schedules: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::assessment-schedule.assessment-schedule'
+    >;
     shuffleOptions: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     shuffleQuestions: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<true>;
     tabSwitchLimit: Schema.Attribute.Integer;
     totalMarks: Schema.Attribute.Integer;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiBatchCandidateBatchCandidate
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'batch_candidates';
+  info: {
+    displayName: 'batchCandidate';
+    pluralName: 'batch-candidates';
+    singularName: 'batch-candidate';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    batch: Schema.Attribute.Relation<'manyToOne', 'api::batch.batch'>;
+    candidateStatus: Schema.Attribute.Enumeration<
+      ['pending', 'registered', 'attempted']
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email & Schema.Attribute.Required;
+    enrollment: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::batch-candidate.batch-candidate'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+  };
+}
+
+export interface ApiBatchBatch extends Struct.CollectionTypeSchema {
+  collectionName: 'batches';
+  info: {
+    displayName: 'batch';
+    pluralName: 'batches';
+    singularName: 'batch';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    candidates: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::batch-candidate.batch-candidate'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::batch.batch'> &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    schedules: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::assessment-schedule.assessment-schedule'
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -591,6 +729,10 @@ export interface ApiOrganizationOrganization
     draftAndPublish: true;
   };
   attributes: {
+    assessment_schedules: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::assessment-schedule.assessment-schedule'
+    >;
     assessments: Schema.Attribute.Relation<
       'oneToMany',
       'api::assessment.assessment'
@@ -1215,6 +1357,10 @@ export interface PluginUsersPermissionsUser
       'oneToMany',
       'api::interview.interview'
     >;
+    invites: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::batch-candidate.batch-candidate'
+    >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1269,7 +1415,10 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::assessment-attempt.assessment-attempt': ApiAssessmentAttemptAssessmentAttempt;
+      'api::assessment-schedule.assessment-schedule': ApiAssessmentScheduleAssessmentSchedule;
       'api::assessment.assessment': ApiAssessmentAssessment;
+      'api::batch-candidate.batch-candidate': ApiBatchCandidateBatchCandidate;
+      'api::batch.batch': ApiBatchBatch;
       'api::interview.interview': ApiInterviewInterview;
       'api::organization.organization': ApiOrganizationOrganization;
       'api::question-bank.question-bank': ApiQuestionBankQuestionBank;

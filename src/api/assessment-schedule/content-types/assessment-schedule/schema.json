@@ -1,0 +1,88 @@
+{
+  "kind": "collectionType",
+  "collectionName": "assessment_schedules",
+  "info": {
+    "singularName": "assessment-schedule",
+    "pluralName": "assessment-schedules",
+    "displayName": "assessmentSchedule"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "startTime": {
+      "type": "datetime"
+    },
+    "endTime": {
+      "type": "datetime"
+    },
+    "duration": {
+      "type": "integer"
+    },
+    "maxAttempts": {
+      "type": "integer"
+    },
+    "scheduleStatus": {
+      "type": "enumeration",
+      "enum": [
+        "upcoming",
+        "live",
+        "completed",
+        "expired"
+      ]
+    },
+    "assessment": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::assessment.assessment",
+      "inversedBy": "schedules"
+    },
+    "batch": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::batch.batch",
+      "inversedBy": "schedules"
+    },
+    "organization": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::organization.organization",
+      "inversedBy": "assessment_schedules"
+    },
+    "attempts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::assessment-attempt.assessment-attempt",
+      "mappedBy": "schedule"
+    },
+    "graceTime": {
+      "type": "integer"
+    },
+    "isActive": {
+      "type": "boolean"
+    },
+    "visibility": {
+      "type": "enumeration",
+      "enum": [
+        "batch-only",
+        "public",
+        "invite-only"
+      ]
+    },
+    "resultReleaseMode": {
+      "type": "enumeration",
+      "enum": [
+        "instant",
+        "afterEnd",
+        "manual"
+      ]
+    },
+    "allowReattempt": {
+      "type": "boolean"
+    },
+    "instructions": {
+      "type": "blocks"
+    }
+  }
+}
