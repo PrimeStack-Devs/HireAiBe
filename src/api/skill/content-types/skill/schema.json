@@ -15,16 +15,6 @@
       "type": "string",
       "required": true
     },
-    "category": {
-      "type": "enumeration",
-      "enum": [
-        "technical",
-        "hr",
-        "aptitude",
-        "soft-skills",
-        "coding"
-      ]
-    },
     "isActive": {
       "type": "boolean",
       "default": true
@@ -40,6 +30,10 @@
       "relation": "manyToMany",
       "target": "api::question-bank.question-bank",
       "mappedBy": "skills"
+    },
+    "value": {
+      "type": "string",
+      "required": true
     }
   }
 }
